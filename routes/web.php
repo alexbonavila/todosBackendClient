@@ -24,4 +24,15 @@ Route::group(['middleware' => 'auth'], function () {
     #adminlte_routes
     Route::get('tasks', 'TasksController@index')->name('tasks');
 
+    Route::get('/redirect', function () {
+        $query = http_build_query([
+            'client_id' => 'client-id',
+            'redirect_uri' => 'http://example.com/callback',
+            'response_type' => 'code',
+            'scope' => '',
+        ]);
+
+        return redirect('http://localhost:8000/oauth/authorize?'.$query);
+    });
+
 });
