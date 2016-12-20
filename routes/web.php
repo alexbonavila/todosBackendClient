@@ -11,8 +11,37 @@
 |
 */
 
+use GuzzleHttp\Client;
+
 Route::get('/', function () {
     return view('welcome');
+});
+
+Route::get('/redirect', function () {
+    $query = http_build_query([
+        'client_id' => '3',
+        'redirect_uri' => 'http://localhost:8080/auth/callback',
+        'response_type' => 'code',
+        'scope' => '',
+    ]);
+
+    return redirect('http://localhost:8000/oauth/authorize?'.$query);
+});
+
+Route::get('/auth/callback', function (Request $request) {
+    $http = new Client;
+
+    $response = $http->post('http://your-app.com/oauth/token', [
+        'form_params' => [
+            'grant_type' => 'authorization_code',
+            'client_id' => '3',
+            'client_secret' => 'qOxBZ59sHBYEGMYmomgIuSl7NANRBIIwbnjBanKL',
+            'redirect_uri' => 'http://localhost:8080/auth/callback',
+            'code' => $request->code,
+        ],
+    ]);
+
+    return json_decode((string) $response->getBody(), true);
 });
 
 Route::group(['middleware' => 'auth'], function () {
@@ -24,15 +53,5 @@ Route::group(['middleware' => 'auth'], function () {
     #adminlte_routes
     Route::get('tasks', 'TasksController@index')->name('tasks');
 
-    Route::get('/redirect', function () {
-        $query = http_build_query([
-            'client_id' => 'client-id',
-            'redirect_uri' => 'http://example.com/callback',
-            'response_type' => 'code',
-            'scope' => '',
-        ]);
-
-        return redirect('http://localhost:8000/oauth/authorize?'.$query);
-    });
 
 });
