@@ -20,24 +20,24 @@ Route::get('/', function () {
 Route::get('/redirect', function () {
     $query = http_build_query([
         'client_id' => '3',
-        'redirect_uri' => 'http://localhost:8080/auth/callback',
+        'redirect_uri' => 'http://client.dev:8082/auth/callback',
         'response_type' => 'code',
         'scope' => '',
     ]);
 
-    return redirect('http://localhost:8000/oauth/authorize?'.$query);
+    return redirect('http://localhost:8080/oauth/authorize?'.$query);
 });
 
-Route::get('/auth/callback', function (Request $request) {
+Route::get('/auth/callback', function () {
     $http = new Client;
 
-    $response = $http->post('http://your-app.com/oauth/token', [
+    $response = $http->post('http://localhost:8080/oauth/token', [
         'form_params' => [
             'grant_type' => 'authorization_code',
             'client_id' => '3',
             'client_secret' => 'qOxBZ59sHBYEGMYmomgIuSl7NANRBIIwbnjBanKL',
-            'redirect_uri' => 'http://localhost:8080/auth/callback',
-            'code' => $request->code,
+            'redirect_uri' => 'http://client.dev:8082/auth/callback',
+            'code' => Request::input('code'),
         ],
     ]);
 
