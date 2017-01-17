@@ -28,6 +28,17 @@ Route::get('/redirect', function () {
     return redirect('http://localhost:8080/oauth/authorize?'.$query);
 });
 
+Route::get('/redirect2', function () {
+    $query = http_build_query([
+        'client_id' => '3',
+        'redirect_uri' => 'http://client.dev:8082/auth/callback',
+        'response_type' => 'token', //implicit
+        'scope' => '',
+    ]);
+
+    return redirect('http://localhost:8080/oauth/authorize?'.$query);
+});
+
 Route::get('/auth/callback', function () {
     $http = new Client;
 
@@ -41,7 +52,9 @@ Route::get('/auth/callback', function () {
         ],
     ]);
 
-    return json_decode((string) $response->getBody(), true);
+    $json=json_decode((string) $response->getBody(), true);
+
+
 });
 
 Route::group(['middleware' => 'auth'], function () {
