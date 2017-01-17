@@ -20,7 +20,7 @@ Route::get('/', function () {
 Route::get('/redirect', function () {
     $query = http_build_query([
         'client_id' => '3',
-        'redirect_uri' => 'http://client.dev:8082/auth/callback',
+        'redirect_uri' => 'http://client.dev:8082/auth/callback',//Cal fer quadrar a la BD la url del client amb aquesta
         'response_type' => 'code',
         'scope' => '',
     ]);
@@ -28,10 +28,10 @@ Route::get('/redirect', function () {
     return redirect('http://localhost:8080/oauth/authorize?'.$query);
 });
 
-Route::get('/redirect2', function () {
+Route::get('/redirect_implicit', function () {
     $query = http_build_query([
         'client_id' => '3',
-        'redirect_uri' => 'http://client.dev:8082/auth/callback',
+        'redirect_uri' => 'http://client.dev:8082/auth/callback',//Cal fer quadrar a la BD la url del client amb aquesta
         'response_type' => 'token', //implicit
         'scope' => '',
     ]);
